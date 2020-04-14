@@ -8,6 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.tjclawson.mvvm_practice.R
+import com.tjclawson.mvvm_practice.data.WeatherstackApiService
+import com.tjclawson.mvvm_practice.data.response.CurrentWeatherResponse
+import kotlinx.android.synthetic.main.current_weather_fragment.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CurrentWeatherFragment : Fragment() {
 
@@ -29,6 +38,13 @@ class CurrentWeatherFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(CurrentWeatherViewModel::class.java)
         // TODO: Use the ViewModel
+
+        val apiService = WeatherstackApiService()
+
+        GlobalScope.launch(Dispatchers.Main) {
+            val currentWeatherResponse = apiService.getCurrentWeather("New York").await()
+            textview.text = currentWeatherResponse.toString()
+        }
     }
 
 }
