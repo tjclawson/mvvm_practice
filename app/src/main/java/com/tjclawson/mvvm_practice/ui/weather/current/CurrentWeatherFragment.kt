@@ -12,17 +12,19 @@ import com.tjclawson.mvvm_practice.R
 import com.tjclawson.mvvm_practice.data.network.ConnectivityInterceptorImpl
 import com.tjclawson.mvvm_practice.data.network.WeatherNetworkDataSourceImpl
 import com.tjclawson.mvvm_practice.data.network.WeatherstackApiService
+import com.tjclawson.mvvm_practice.ui.ScopedFragment
 import kotlinx.android.synthetic.main.current_weather_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 
-class CurrentWeatherFragment : Fragment() {
+class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
 
-    companion object {
-        fun newInstance() =
-            CurrentWeatherFragment()
-    }
+    override val kodein by closestKodein()
+    private val viewModelFactory: CurrentWeatherViewModelFactory by instance()
 
     private lateinit var viewModel: CurrentWeatherViewModel
 
@@ -35,20 +37,17 @@ class CurrentWeatherFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(CurrentWeatherViewModel::class.java)
-        // TODO: Use the ViewModel
+        viewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(CurrentWeatherViewModel::class.java)
 
-        val apiService = WeatherstackApiService((ConnectivityInterceptorImpl(this.context!!)))
-        val weatherNetworkDataSource = WeatherNetworkDataSourceImpl(apiService)
-
-        weatherNetworkDataSource.downloadedCurrentWeather.observe(viewLifecycleOwner, Observer {
-            textview.text = it.toString()
-
-        })
-
-        GlobalScope.launch(Dispatchers.Main) {
-            weatherNetworkDataSource.fetchCurrentWeather("London")
-        }
+        bindUI()
     }
 
+    private fun bindUI() = launch {
+        val currentWeather = viewModel.weather.await()
+        currentWeather.observe(viewLifecycleOwner, Observer {
+            if (it == null) return@Observer
+            textview.text = it.toString()
+        })
+    }
 }
