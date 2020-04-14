@@ -9,14 +9,10 @@ import android.view.ViewGroup
 
 import com.tjclawson.mvvm_practice.R
 import com.tjclawson.mvvm_practice.data.WeatherstackApiService
-import com.tjclawson.mvvm_practice.data.response.CurrentWeatherResponse
 import kotlinx.android.synthetic.main.current_weather_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class CurrentWeatherFragment : Fragment() {
 
