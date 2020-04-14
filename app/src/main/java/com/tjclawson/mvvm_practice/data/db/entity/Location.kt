@@ -1,4 +1,4 @@
-package com.tjclawson.mvvm_practice.data.response
+package com.tjclawson.mvvm_practice.data.db.entity
 
 
 import com.google.gson.annotations.SerializedName
