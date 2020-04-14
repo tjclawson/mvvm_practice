@@ -2,6 +2,7 @@ package com.tjclawson.mvvm_practice.data
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.tjclawson.mvvm_practice.BuildConfig
+import com.tjclawson.mvvm_practice.data.network.ConnectivityInterceptor
 import com.tjclawson.mvvm_practice.data.network.response.CurrentWeatherResponse
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
@@ -20,7 +21,9 @@ interface WeatherstackApiService {
 
         const val API_KEY = BuildConfig.weatherstack_api_key
 
-        operator fun invoke(): WeatherstackApiService {
+        operator fun invoke(
+            connectivityInterceptor: ConnectivityInterceptor
+        ): WeatherstackApiService {
             val requestInteceptor = Interceptor { chain ->
                 val url = chain.request()
                     .url()
@@ -38,6 +41,7 @@ interface WeatherstackApiService {
 
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(requestInteceptor)
+                .addInterceptor(connectivityInterceptor)
                 .build()
 
             return Retrofit.Builder()
