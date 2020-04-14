@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.tjclawson.mvvm_practice.R
-import com.tjclawson.mvvm_practice.data.WeatherstackApiService
+import com.tjclawson.mvvm_practice.data.network.WeatherstackApiService
 import kotlinx.android.synthetic.main.current_weather_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -35,7 +35,8 @@ class CurrentWeatherFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(CurrentWeatherViewModel::class.java)
         // TODO: Use the ViewModel
 
-        val apiService = WeatherstackApiService()
+        val apiService =
+            WeatherstackApiService()
 
         GlobalScope.launch(Dispatchers.Main) {
             val currentWeatherResponse = apiService.getCurrentWeather("New York").await()

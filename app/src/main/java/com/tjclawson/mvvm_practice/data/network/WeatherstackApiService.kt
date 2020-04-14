@@ -1,8 +1,7 @@
-package com.tjclawson.mvvm_practice.data
+package com.tjclawson.mvvm_practice.data.network
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.tjclawson.mvvm_practice.BuildConfig
-import com.tjclawson.mvvm_practice.data.network.ConnectivityInterceptor
 import com.tjclawson.mvvm_practice.data.network.response.CurrentWeatherResponse
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
